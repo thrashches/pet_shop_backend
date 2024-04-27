@@ -52,3 +52,11 @@ class Goods(models.Model):
         if not self.pk:
             self.slug = slugify(self.name)
         super(Goods, self).save(*args, **kwargs)
+
+
+class Warehouse(models.Model):
+    product = models.ForeignKey(Goods, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'{self.product} - {self.quantity} things'
