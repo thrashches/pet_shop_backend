@@ -1,8 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.defaultfilters import slugify
 
-SHORT_NAME_LENGTH = 10
 
+SHORT_NAME_LENGTH = 10
+User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField('Название', max_length=128)
@@ -55,8 +57,16 @@ class Goods(models.Model):
 
 
 class Warehouse(models.Model):
-    product = models.ForeignKey(Goods, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    product = models.ForeignKey(Goods, on_delete=models.CASCADE, verbose_name='Продукт')
+    quantity = models.PositiveIntegerField(verbose_name='Кол-во')
 
     def __str__(self):
         return f'{self.product} - {self.quantity} things'
+
+class ProductBasket(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='food_basket', verbose_name='Корзина')
+    products = models.ManyToManyField(Goods, verbose_name='Продукты')
+    quantity = models.PositiveIntegerField(verbose_name='Кол-во')
+
+    def __str__(self):
+        return f' Корзина {self.customer}'
