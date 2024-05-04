@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, TokenObtainPairSerializer
 
+User = get_user_model()
 
 class RegisterView(APIView):
     http_method_names = ['post']
@@ -13,7 +14,7 @@ class RegisterView(APIView):
     def post(self, *args, **kwargs):
         serializer = UserSerializer(data=self.request.data)
         if serializer.is_valid():
-            get_user_model().objects.create_user(**serializer.validated_data)
+            User.objects.create_user(**serializer.validated_data)
             return Response(status=HTTP_201_CREATED)
         return Response(status=HTTP_400_BAD_REQUEST, data={'errors': serializer.errors})
 
