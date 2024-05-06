@@ -125,4 +125,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SHORT_NAME_LENGTH = 12
 
-INTERNAL_IPS = ["127.0.0.1",]
+INTERNAL_IPS = ["127.0.0.1", ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}

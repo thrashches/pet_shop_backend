@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from .models import Category, Goods, Characteristic_value
+from .models import Category, Goods, GoodsCharacteristic, Characteristic
+
+
+class GoodsCharacteristicInline(admin.TabularInline):
+    model = GoodsCharacteristic
 
 
 @admin.register(Goods)
@@ -12,20 +16,28 @@ class GoodsAdmin(admin.ModelAdmin):
                     'description',
                     'get_characteristic',
                     )
+
+    readonly_fields = ('slug',)
     search_fields = ('name',)
     list_filter = ('price',)
 
     def get_characteristic(self, obj):
-        print(obj.characteristic.name)
         return ', '.join(
-            [f'{characteristic.name}-{characteristic.value}' for
-             characteristic in obj.characteristic.all()])
+            [f'{characteristic.characteristic}-{characteristic.value}' for
+             characteristic in obj.goods_characteristic.all()])
 
     def get_queryset(self, request):
         return Goods.objects.all().prefetch_related('characteristic')
 
+    inlines = (GoodsCharacteristicInline,)
+
     get_characteristic.short_description = 'Характеристики'
 
 
-admin.site.register(Category)
-admin.site.register(Characteristic_value)
+class CategoryAdmin(admin.ModelAdmin):
+    readonly_fields = ('slug',)
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Characteristic)
+admin.site.register(GoodsCharacteristic)
