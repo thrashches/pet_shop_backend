@@ -16,7 +16,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GoodsSerializer(serializers.ModelSerializer):
-    characteristic = CharacteristicSerializer(many=True,)
+    characteristics = CharacteristicSerializer(many=True, )
     category = CategorySerializer()
 
     class Meta:

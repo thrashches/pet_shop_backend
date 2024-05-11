@@ -46,14 +46,14 @@ class Goods(models.Model):
                                 max_digits=9,
                                 decimal_places=2)
     description = models.TextField('Описание', max_length=2000)
-    characteristic = models.ManyToManyField(Characteristic,
-                                            through='GoodsCharacteristic',
-                                            related_name='goods',
-                                            verbose_name='Характеристики',
-                                            )
+    characteristics = models.ManyToManyField(Characteristic,
+                                             through='GoodsCharacteristic',
+                                             related_name='goods',
+                                             verbose_name='Характеристики',
+                                             )
 
     class Meta:
-        verbose_name = 'товар'
+        verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
     def __str__(self):

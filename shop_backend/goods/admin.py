@@ -20,18 +20,20 @@ class GoodsAdmin(admin.ModelAdmin):
     readonly_fields = ('slug',)
     search_fields = ('name',)
     list_filter = ('price',)
-
-    def get_characteristic(self, obj):
-        return ', '.join(
-            [f'{characteristic.characteristic}-{characteristic.value}' for
-             characteristic in obj.goods_characteristic.all()])
-
-    def get_queryset(self, request):
-        return Goods.objects.all().prefetch_related('characteristic')
-
     inlines = (GoodsCharacteristicInline,)
 
+    def get_characteristic(self, obj):
+        characteristics = obj.characteristics.all()
+        if characteristics:
+            return ', '.join(
+                [characteristic.name for characteristic in characteristics]
+            )
+        return '-'
+
     get_characteristic.short_description = 'Характеристики'
+
+    def get_queryset(self, request):
+        return Goods.objects.all().prefetch_related('characteristics')
 
 
 class CategoryAdmin(admin.ModelAdmin):
